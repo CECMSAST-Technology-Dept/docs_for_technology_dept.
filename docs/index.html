@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Import mermaid -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
+  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    var num = 0;
+    mermaid.initialize({ startOnLoad: false });
+  </script>
+  <!-- Import mermaid finished -->
+  
+  <script>
+    window.$docsify = {
+      name: '土木系、建管系科协网站',
+      nameLink: 'https://thuce.top/', //点击标题跳转
+      repo: 'Ecthelion-F/docs_for_sast_website', //github repo
+      loadSidebar: true, //定制侧边栏，具体在_sidebar.md文件里，暂不开启
+      subMaxLevel: 3,
+      
+      //开启mermaid解析
+      markdown: {
+        renderer: {
+          code: function(code, lang) {
+            if (lang === "mermaid") {
+              return (
+                '<div class="mermaid">' + mermaid.render('mermaid-svg-' + num++, code) + "</div>"
+              );
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      //开启mermaid解析部分结束
+
+      // 设置文件更新时间
+      formatUpdated: '{YYYY}/{MM}/{DD} {HH}:{mm}',
+      plugins: [
+        function(hook, vm) {
+          hook.beforeEach(function(html) {
+            var url =
+              'https://github.com/Ecthelion-F/docs_for_sast_website/blob/main/docs/' +
+              vm.route.file;
+            var editHtml = '[📝编辑本篇文档](' + url + ')\n';
+            
+            var n = html.search(/@update/i);
+            if (n!=-1){
+              var updataTime = html.slice(n+7, n+23);
+            }else{
+              var updataTime = '{docsify-updated}';
+            }
+
+            return (
+              '> 本篇文档最后修改于 ' + updataTime + ' | ' +
+              editHtml +
+              '\n' +
+              html
+            );
+          });
+        }
+      ]
+    }
+  </script>
+  
+  <!-- CDN files for docsify-katex -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+  <!-- or <script src="//cdn.jsdelivr.net/gh/upupming/docsify-katex@latest/dist/docsify-katex.js"></script> -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"/>
+
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+</body>
+</html>
